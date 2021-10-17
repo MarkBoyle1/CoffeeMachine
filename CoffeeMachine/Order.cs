@@ -1,37 +1,42 @@
 using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace CoffeeMachine
 {
     public class Order
     {
-        private string _drink;
-        private string _sugarAmount;
-        private bool _requiresStick;
+        private List<IDrink> _drinkList;
 
-        public string CreateOrder(string input)
+        public Order()
         {
-            string[] splitInput = input.Split(':', StringSplitOptions.RemoveEmptyEntries);
-
-            _drink = splitInput[0];
-            _sugarAmount = splitInput.Length > 1 ? splitInput[1] : "0";
-            _requiresStick = splitInput.Length == 3;
-
-            return input;
+            _drinkList = new List<IDrink>();
         }
 
-        public string GetDrink()
+        public Order AddDrinkToOrder(IDrink drink)
         {
-            return _drink;
+            _drinkList.Add(drink);
+            return this;
         }
 
-        public string GetSugarAmount()
+        public string BuildMessage()
         {
-            return _sugarAmount;
-        }
+            StringBuilder message = new StringBuilder();
+            
+            foreach (var drink in _drinkList)
+            {
+                string drinkMessage = $"1 {drink.GetDrinkType()}";
 
-        public bool RequiresStick()
-        {
-            return _requiresStick;
+                string sugar = drink.GetSugarAmount() != "0" ? drink.GetSugarAmount() : "no";
+                string sugarMessage = $" with {sugar} sugar";
+
+                string stick = sugar == "no" ? " and no stick" : " and a stick";
+                string stickMessage = $"{stick}";
+
+                message.Append($"Make {drinkMessage}{sugarMessage}{stickMessage}\n");
+            }
+
+            return message.ToString();
         }
     }
 }
