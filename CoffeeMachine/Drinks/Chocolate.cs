@@ -1,13 +1,17 @@
+using System.Text;
+
 namespace CoffeeMachine.Drinks
 {
     public class Chocolate : IDrink
     {
-        private string _drinkType;
-        private string _sugarAmount;
+        public string _drinkType;
+        public string _sugarAmount;
+        private MessageBuilder _messageBuilder = new MessageBuilder();
 
-        public Chocolate()
+        public Chocolate(string sugarAmount)
         {
             _drinkType = "Chocolate";
+            _sugarAmount = sugarAmount;
         }
         
         
