@@ -6,6 +6,5 @@ namespace CoffeeMachine
         
         public string GetSugarAmount();
         
-        IDrink AddSugar(string sugarAmount);
     }
 }

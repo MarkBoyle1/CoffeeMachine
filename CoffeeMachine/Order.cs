@@ -8,13 +8,13 @@ namespace CoffeeMachine
     {
         public List<IDrink> DrinkList { get; }
 
-        public Order()
+        public Order(IDrink drink)
         {
-            DrinkList = new List<IDrink>();
+            DrinkList = new List<IDrink>() {drink};
         }
-
-        public void AddDrinkToOrder(IDrink drink)
+        public Order(Order order, IDrink drink)
         {
+            DrinkList = new List<IDrink>(order.DrinkList);
             DrinkList.Add(drink);
         }
     }

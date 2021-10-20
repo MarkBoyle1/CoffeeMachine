@@ -8,8 +8,7 @@ namespace CoffeeMachine.Tests
     {
         private CoffeeMachineEngine _coffeeMachineEngine = new CoffeeMachineEngine();
         InputProcessor _inputProcessor = new InputProcessor();
-
-
+        
         [Fact]
         public void given_inputEqualsT_when_ProcessInput_then_GetDrinkType_returns_Tea()
         {
@@ -43,9 +42,9 @@ namespace CoffeeMachine.Tests
         }
         
         [Fact]
-        public void given_inputEqualsT_when_CreateOrder_then_returns_Make_1_Tea_with_no_sugar_and_no_stick()
+        public void given_inputEqualsT_when_CreateMessage_then_returns_Make_1_Tea_with_no_sugar_and_no_stick()
         {
-            string message = _coffeeMachineEngine.CreateOrder("T::");
+            string message = _coffeeMachineEngine.CreateMessage("T::");
 
             string expectedMessage = "Make 1 Tea with no sugar and no stick\n";
             
@@ -53,9 +52,9 @@ namespace CoffeeMachine.Tests
         }
         
         [Fact]
-        public void given_inputEqualsT1_when_CreateOrder_then_returns_Make_1_Tea_with_1_sugar_and_a_stick()
+        public void given_inputEqualsT1_when_CreateMessage_then_returns_Make_1_Tea_with_1_sugar_and_a_stick()
         {
-            string message = _coffeeMachineEngine.CreateOrder("T:1:");
+            string message = _coffeeMachineEngine.CreateMessage("T:1:");
 
             string expectedMessage = "Make 1 Tea with 1 sugar and a stick\n";
             
@@ -63,11 +62,21 @@ namespace CoffeeMachine.Tests
         }
         
         [Fact]
-        public void given_inputEqualsC1_when_CreateOrder_then_returns_Make_1_Coffee_with_1_sugar_and_a_stick()
+        public void given_inputEqualsC1_when_CreateMessage_then_returns_Make_1_Coffee_with_1_sugar_and_a_stick()
         {
-            string message = _coffeeMachineEngine.CreateOrder("C:1:");
+            string message = _coffeeMachineEngine.CreateMessage("C:1:");
 
             string expectedMessage = "Make 1 Coffee with 1 sugar and a stick\n";
+            
+            Assert.Equal(expectedMessage, message);
+        }
+        
+        [Fact]
+        public void given_inputEqualsMtest_when_CreateMessage_then_returns_test()
+        {
+            string message = _coffeeMachineEngine.CreateMessage("M:test");
+
+            string expectedMessage = "test";
             
             Assert.Equal(expectedMessage, message);
         }

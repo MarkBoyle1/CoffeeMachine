@@ -7,7 +7,7 @@ namespace CoffeeMachine
         static void Main(string[] args)
         {
             CoffeeMachineEngine _coffeeMachineEngine = new CoffeeMachineEngine();
-            Console.WriteLine(_coffeeMachineEngine.CreateOrder("T::"));
+            _coffeeMachineEngine.CreateMessage("T:2:0");
         }
     }
 }

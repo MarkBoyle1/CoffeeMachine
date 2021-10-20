@@ -1,8 +1,9 @@
 using System;
+using CoffeeMachine.Output;
 
 namespace CoffeeMachine
 {
-    public class Output
+    public class CustomerOutput : IOutput
     {
         public void DisplayMessage(string message)
         {

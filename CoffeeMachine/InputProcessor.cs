@@ -6,10 +6,6 @@ namespace CoffeeMachine
 {
     public class InputProcessor
     {
-        private Dictionary<string, IDrink> drinks;
-        private string _drink;
-        private string _sugarAmount;
-        
         public IDrink ProcessInput(string input)
         {
             string[] inputArray = input.Split(':', StringSplitOptions.RemoveEmptyEntries);

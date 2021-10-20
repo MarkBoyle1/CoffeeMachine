@@ -4,17 +4,15 @@ namespace CoffeeMachine.Drinks
 {
     public class Chocolate : IDrink
     {
-        public string _drinkType;
-        public string _sugarAmount;
-        private MessageBuilder _messageBuilder = new MessageBuilder();
+        private string _drinkType;
+        private string _sugarAmount;
 
         public Chocolate(string sugarAmount)
         {
             _drinkType = "Chocolate";
             _sugarAmount = sugarAmount;
         }
-        
-        
+
         public string GetDrinkType()
         {
             return _drinkType;
@@ -23,12 +21,6 @@ namespace CoffeeMachine.Drinks
         public string GetSugarAmount()
         {
             return _sugarAmount;
-        }
-        
-        public IDrink AddSugar(string sugarAmount)
-        {
-            _sugarAmount = sugarAmount;
-            return this;
         }
     }
 }
