@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -5,11 +6,11 @@ namespace CoffeeMachine
 {
     public class MessageBuilder
     {
-        public string BuildOrderMessage(List<IDrink> orderList)
+        public string BuildOrderMessage(Order order)
         {
             StringBuilder orderMessage = new StringBuilder();
 
-            foreach (var drink in orderList)
+            foreach (var drink in order.DrinkList)
             {
                 string message = BuildIndividualDrinkMessage(drink.GetDrinkType(), drink.GetSugarAmount());
                 orderMessage.Append(message);
@@ -33,6 +34,12 @@ namespace CoffeeMachine
             message.Append($"Make {drinkMessage}{sugarMessage}{stickMessage}\n");
                 
             return message.ToString();
+        }
+
+        public string BuildNotEnoughMoneyMessage(double moneyInserted, double price)
+        {
+            double missingAmount = Math.Round((price - moneyInserted), 1);
+            return $"Sorry, not enough money has been inserted. {missingAmount} more needed.";
         }
     }
 }

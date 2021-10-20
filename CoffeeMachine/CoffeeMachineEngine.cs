@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using CoffeeMachine.Output;
 
@@ -9,42 +11,61 @@ namespace CoffeeMachine
         private InputProcessor _inputProcessor;
         private MessageBuilder _messageBuilder;
         private IOutput _output;
+        private List<char> _validDrinkCodes;
 
         public CoffeeMachineEngine()
         {
             _inputProcessor = new InputProcessor();
             _messageBuilder = new MessageBuilder();
+            _validDrinkCodes = new List<char>() {'C', 'T', 'H'};
         }
         
-        public string CreateMessage(string input)
+        public string CreateMessage(params string[] input)
         {
-            string message;
+            string message = "";
+            double number;
+            double moneyInserted = double.TryParse(input.Last(), out number) ? Convert.ToDouble(input.Last()) : 0;
             
-            if (input.First() == 'M')
+            if (input[0].First() == 'M')
             {
                 _output = new CustomerOutput();
-                message = CreateMessageForCustomer(input);
+                message = CreateMessageForCustomer(input[0]);
             }
-            else
+            else if(_validDrinkCodes.Contains(input[0].First()))
             {
                 _output = new DrinkMakerOutput();
-                message = CreateOrder(input);
+                Order order = CreateOrder(input);
+
+                if (moneyInserted < order.TotalPrice)
+                {
+                    message = _messageBuilder.BuildNotEnoughMoneyMessage(moneyInserted, order.TotalPrice);
+                    _output.DisplayMessage(message);
+                    return message;
+                }
+
+                message = _messageBuilder.BuildOrderMessage(order);
             }
-            
+
+
+            string finalMessage = String.Join("", message);
+
             _output.DisplayMessage(message);
 
-            return message;
+            return finalMessage;
         }
         
-        public string CreateOrder(string input)
+        public Order CreateOrder(string[] input)
         {
-            IDrink drink = _inputProcessor.ProcessInput(input);
-
-            Order order = new Order(drink);
-
-            string finalMessage = _messageBuilder.BuildOrderMessage(order.DrinkList);
+            Order order = new Order();
             
-            return finalMessage;
+            for (int i = 0; i <= input.Length - 1; i++)
+            {
+                IDrink drink = _inputProcessor.ProcessInput(input[i]);
+                if(drink != null)
+                    order = new Order(order, drink);
+            }
+
+            return order;
         }
         
         private string CreateMessageForCustomer(string input)
