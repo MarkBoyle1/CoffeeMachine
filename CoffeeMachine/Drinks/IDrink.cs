@@ -4,7 +4,9 @@ namespace CoffeeMachine
     {
         string GetDrinkType();
         
-        public string GetSugarAmount();
-        
+        string GetSugarAmount();
+
+        double GetPrice();
+
     }
 }

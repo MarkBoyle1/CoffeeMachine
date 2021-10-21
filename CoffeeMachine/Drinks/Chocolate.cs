@@ -6,10 +6,12 @@ namespace CoffeeMachine.Drinks
     {
         private string _drinkType;
         private string _sugarAmount;
+        private double _price;
 
         public Chocolate(string sugarAmount)
         {
             _drinkType = "Chocolate";
+            _price = 0.5;
             _sugarAmount = sugarAmount;
         }
 
@@ -21,6 +23,11 @@ namespace CoffeeMachine.Drinks
         public string GetSugarAmount()
         {
             return _sugarAmount;
+        }
+        
+        public double GetPrice()
+        {
+            return _price;
         }
     }
 }
