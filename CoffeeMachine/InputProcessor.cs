@@ -26,6 +26,9 @@ namespace CoffeeMachine
                 case "H" : 
                     drink = new Chocolate(sugarAmount);
                     break;
+                case "O" : 
+                    drink = new OrangeJuice();
+                    break;
             }
 
             return drink;

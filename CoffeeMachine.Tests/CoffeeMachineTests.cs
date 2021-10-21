@@ -90,5 +90,15 @@ namespace CoffeeMachine.Tests
             
             Assert.Equal(expectedMessage, message);
         }
+        
+        [Fact]
+        public void given_inputEqualsO_when_CreateMessage_then_returns_Make_1_Orange_Juice()
+        {
+            string message = _coffeeMachineEngine.CreateMessage("O::", "0.6");
+
+            string expectedMessage = "Make 1 Orange Juice\n";
+            
+            Assert.Equal(expectedMessage, message);
+        }
     }
 }

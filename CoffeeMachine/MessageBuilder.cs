@@ -22,16 +22,21 @@ namespace CoffeeMachine
         private string BuildIndividualDrinkMessage(string _drinkType, string _sugarAmount)
         {
             StringBuilder message = new StringBuilder();
+            string sugarMessage = "";
+            string stickMessage = "";
             
-            string drinkMessage = $"1 {_drinkType}";
+            string drinkMessage = $"Make 1 {_drinkType}";
 
-            string sugar = _sugarAmount != "0" ? _sugarAmount : "no";
-            string sugarMessage = $" with {sugar} sugar";
-
-            string stick = sugar == "no" ? " and no stick" : " and a stick";
-            string stickMessage = $"{stick}";
-
-            message.Append($"Make {drinkMessage}{sugarMessage}{stickMessage}\n");
+            if (_sugarAmount != null)
+            {
+                string sugar = _sugarAmount != "0" ? _sugarAmount : "no";
+                sugarMessage = $" with {sugar} sugar";
+                
+                string stick = sugar == "no" ? " and no stick" : " and a stick";
+                stickMessage = $"{stick}";
+            }
+            
+            message.Append($"{drinkMessage}{sugarMessage}{stickMessage}\n");
                 
             return message.ToString();
         }
