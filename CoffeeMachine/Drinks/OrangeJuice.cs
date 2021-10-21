@@ -1,22 +1,20 @@
-using System.Text;
+using System.Globalization;
 
 namespace CoffeeMachine.Drinks
 {
-    public class Tea : IDrink
+    public class OrangeJuice : IDrink
     {
         private string _drinkType;
-        private string _sugarAmount;
         private double _price;
-        private DrinkTemperature _drinkTemperature;
         private int _quantity;
 
-        public Tea(string sugarAmount, DrinkTemperature drinkTemperature, int quantity)
+
+        public OrangeJuice(int quantity)
         {
-            _drinkType = "Tea";
-            _price = 0.4;
-            _sugarAmount = sugarAmount;
-            _drinkTemperature = drinkTemperature;
+            _drinkType = "Orange Juice";
+            _price = 0.6;
             _quantity = quantity;
+
         }
         
         public string GetDrinkType()
@@ -26,7 +24,7 @@ namespace CoffeeMachine.Drinks
         
         public string GetSugarAmount()
         {
-            return _sugarAmount;
+            return null;
         }
         
         public double GetPrice()
@@ -36,7 +34,7 @@ namespace CoffeeMachine.Drinks
         
         public DrinkTemperature GetDrinkTemperature()
         {
-            return _drinkTemperature;
+            return DrinkTemperature.normal;
         }
         
         public int GetQuantity()

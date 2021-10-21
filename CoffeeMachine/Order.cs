@@ -18,7 +18,7 @@ namespace CoffeeMachine
         {
             DrinkList = new List<IDrink>(order.DrinkList);
             DrinkList.Add(drink);
-            TotalPrice = order.TotalPrice + drink.GetPrice();
+            TotalPrice = order.TotalPrice + drink.GetPrice() * drink.GetQuantity();
         }
     }
 }

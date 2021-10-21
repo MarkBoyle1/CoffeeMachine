@@ -17,12 +17,13 @@ namespace CoffeeMachine
         {
             _inputProcessor = new InputProcessor();
             _messageBuilder = new MessageBuilder();
-            _validDrinkCodes = new List<char>() {'C', 'T', 'H'};
+            _validDrinkCodes = new List<char>() {'C', 'T', 'H', 'O'};
         }
         
         public string CreateMessage(params string[] input)
         {
             string message = "";
+            
             double number;
             double moneyInserted = double.TryParse(input.Last(), out number) ? Convert.ToDouble(input.Last()) : 0;
             
@@ -30,36 +31,44 @@ namespace CoffeeMachine
             {
                 _output = new CustomerOutput();
                 message = CreateMessageForCustomer(input[0]);
+                return message;
             }
-            else if(_validDrinkCodes.Contains(input[0].First()))
+            
+            if(_validDrinkCodes.Contains(input[0].First()))
             {
                 _output = new DrinkMakerOutput();
                 Order order = CreateOrder(input);
 
-                if (moneyInserted < order.TotalPrice)
-                {
-                    message = _messageBuilder.BuildNotEnoughMoneyMessage(moneyInserted, order.TotalPrice);
-                    _output.DisplayMessage(message);
-                    return message;
-                }
-
-                message = _messageBuilder.BuildOrderMessage(order);
-            }
+                message = moneyInserted < order.TotalPrice
+                    ? _messageBuilder.BuildNotEnoughMoneyMessage(moneyInserted, order.TotalPrice)
+                    : _messageBuilder.BuildOrderMessage(order);
             
             _output.DisplayMessage(message);
+            return message;
+            }
 
+            message = "Invalid Input.";
+            _output.DisplayMessage(message);
             return message;
         }
         
         public Order CreateOrder(string[] input)
         {
             Order order = new Order();
-            
-            for (int i = 0; i <= input.Length - 1; i++)
+
+            //Group exact drink orders together
+            List<IGrouping<string, string>> groupedOrder = input.GroupBy(drinkCode => drinkCode).ToList();
+
+            for (int i = 0; i <= groupedOrder.Count- 1; i++)
             {
-                IDrink drink = _inputProcessor.ProcessInput(input[i]);
-                if(drink != null)
+                string drinkCode = groupedOrder[i].Key;
+                int quantity = groupedOrder[i].Count();
+                
+                IDrink drink = _inputProcessor.ProcessInput(drinkCode, quantity);
+                if (drink != null)
+                {
                     order = new Order(order, drink);
+                }
             }
 
             return order;

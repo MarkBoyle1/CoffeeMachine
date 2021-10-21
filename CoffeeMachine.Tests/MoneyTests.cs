@@ -45,5 +45,15 @@ namespace CoffeeMachine.Tests
             
             Assert.Equal(expectedMessage, message);
         }
+        
+        [Fact]
+        public void given_inputEqualsChandChandCh_and_moneyInsertedIsNotEnough_when_CreateMessage_then_returns_SorryNotEnoughMoneyIsInsertedMessage()
+        {
+            string message = _coffeeMachineEngine.CreateMessage("Ch::", "Ch::", "Ch::", "0.6");
+
+            string expectedMessage = "Sorry, not enough money has been inserted. 1.2 more needed.";
+            
+            Assert.Equal(expectedMessage, message);
+        }
     }
 }

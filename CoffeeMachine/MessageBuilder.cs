@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace CoffeeMachine
@@ -12,28 +13,33 @@ namespace CoffeeMachine
 
             foreach (var drink in order.DrinkList)
             {
-                string message = BuildIndividualDrinkMessage(drink.GetDrinkType(), drink.GetSugarAmount());
+                string message = BuildIndividualDrinkMessage(drink);
                 orderMessage.Append(message);
             }
 
             return orderMessage.ToString();
         }
         
-        private string BuildIndividualDrinkMessage(string _drinkType, string _sugarAmount)
+        private string BuildIndividualDrinkMessage(IDrink drink)
         {
-            StringBuilder message = new StringBuilder();
-            
-            string drinkMessage = $"1 {_drinkType}";
+            string drinkQuantity = drink.GetQuantity().ToString();
+            string sugarMessage = "";
+            string sugarAmount = drink.GetSugarAmount();
+            string drinkTemperature = drink.GetDrinkTemperature().ToString();
+            string drinkTypeMessage = $" {drink.GetDrinkType()}";
 
-            string sugar = _sugarAmount != "0" ? _sugarAmount : "no";
-            string sugarMessage = $" with {sugar} sugar";
+            if (sugarAmount != null)
+            {
+                sugarMessage = sugarAmount != "0" 
+                    ? $" with {sugarAmount} sugar and a stick" 
+                    : " with no sugar and no stick";
+            }
 
-            string stick = sugar == "no" ? " and no stick" : " and a stick";
-            string stickMessage = $"{stick}";
+            string temperatureMessage = drinkTemperature == "normal" 
+                ? "" 
+                : " " + drinkTemperature.Replace('_', ' ');
 
-            message.Append($"Make {drinkMessage}{sugarMessage}{stickMessage}\n");
-                
-            return message.ToString();
+            return $"Make {drinkQuantity}{temperatureMessage}{drinkTypeMessage}{sugarMessage}\n";
         }
 
         public string BuildNotEnoughMoneyMessage(double moneyInserted, double price)
