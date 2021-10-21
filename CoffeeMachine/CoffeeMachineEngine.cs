@@ -45,13 +45,10 @@ namespace CoffeeMachine
 
                 message = _messageBuilder.BuildOrderMessage(order);
             }
-
-
-            string finalMessage = String.Join("", message);
-
+            
             _output.DisplayMessage(message);
 
-            return finalMessage;
+            return message;
         }
         
         public Order CreateOrder(string[] input)
