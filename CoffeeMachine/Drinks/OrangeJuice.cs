@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace CoffeeMachine.Drinks
 {
     public class OrangeJuice : IDrink
@@ -24,6 +26,11 @@ namespace CoffeeMachine.Drinks
         public double GetPrice()
         {
             return _price;
+        }
+        
+        public DrinkTemperature GetDrinkTemperature()
+        {
+            return DrinkTemperature.normal;
         }
     }
 }

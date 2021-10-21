@@ -44,11 +44,12 @@ namespace CoffeeMachine
                     : _messageBuilder.BuildOrderMessage(order);
             
             _output.DisplayMessage(message);
-
             return message;
             }
-            
-            return "Invalid input";
+
+            message = "Invalid Input.";
+            _output.DisplayMessage(message);
+            return message;
         }
         
         public Order CreateOrder(string[] input)

@@ -8,5 +8,6 @@ namespace CoffeeMachine
 
         double GetPrice();
 
+        public DrinkTemperature GetDrinkTemperature();
     }
 }

@@ -100,5 +100,15 @@ namespace CoffeeMachine.Tests
             
             Assert.Equal(expectedMessage, message);
         }
+        
+        [Fact]
+        public void given_inputEqualsCh_when_CreateMessage_then_returns_Make_1_Extra_Hot_Coffee_with_no_sugar_and_no_stick()
+        {
+            string message = _coffeeMachineEngine.CreateMessage("Ch::", "0.6");
+
+            string expectedMessage = "Make 1 extra hot Coffee with no sugar and no stick\n";
+            
+            Assert.Equal(expectedMessage, message);
+        }
     }
 }

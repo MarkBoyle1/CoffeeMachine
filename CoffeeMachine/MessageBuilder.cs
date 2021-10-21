@@ -12,33 +12,33 @@ namespace CoffeeMachine
 
             foreach (var drink in order.DrinkList)
             {
-                string message = BuildIndividualDrinkMessage(drink.GetDrinkType(), drink.GetSugarAmount());
+                string message = BuildIndividualDrinkMessage(drink);
                 orderMessage.Append(message);
             }
 
             return orderMessage.ToString();
         }
         
-        private string BuildIndividualDrinkMessage(string _drinkType, string _sugarAmount)
+        private string BuildIndividualDrinkMessage(IDrink drink)
         {
-            StringBuilder message = new StringBuilder();
+            string drinkQuantity = " 1";
             string sugarMessage = "";
-            string stickMessage = "";
-            
-            string drinkMessage = $"Make 1 {_drinkType}";
+            string sugarAmount = drink.GetSugarAmount();
+            string drinkTemperature = drink.GetDrinkTemperature().ToString();
+            string drinkTypeMessage = $" {drink.GetDrinkType()}";
 
-            if (_sugarAmount != null)
+            if (sugarAmount != null)
             {
-                string sugar = _sugarAmount != "0" ? _sugarAmount : "no";
-                sugarMessage = $" with {sugar} sugar";
-                
-                string stick = sugar == "no" ? " and no stick" : " and a stick";
-                stickMessage = $"{stick}";
+                sugarMessage = sugarAmount != "0" 
+                    ? $" with {sugarAmount} sugar and a stick" 
+                    : " with no sugar and no stick";
             }
-            
-            message.Append($"{drinkMessage}{sugarMessage}{stickMessage}\n");
-                
-            return message.ToString();
+
+            string temperatureMessage = drinkTemperature == "normal" 
+                ? "" 
+                : " " + drinkTemperature.Replace('_', ' ');
+
+            return $"Make{drinkQuantity}{temperatureMessage}{drinkTypeMessage}{sugarMessage}\n";
         }
 
         public string BuildNotEnoughMoneyMessage(double moneyInserted, double price)
