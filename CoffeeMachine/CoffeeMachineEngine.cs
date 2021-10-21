@@ -55,10 +55,16 @@ namespace CoffeeMachine
         public Order CreateOrder(string[] input)
         {
             Order order = new Order();
-            
-            for (int i = 0; i <= input.Length - 1; i++)
+
+            //Group exact drink orders together
+            List<IGrouping<string, string>> groupedOrder = input.GroupBy(drinkCode => drinkCode).ToList();
+
+            for (int i = 0; i <= groupedOrder.Count- 1; i++)
             {
-                IDrink drink = _inputProcessor.ProcessInput(input[i]);
+                string drinkCode = groupedOrder[i].Key;
+                int quantity = groupedOrder[i].Count();
+                
+                IDrink drink = _inputProcessor.ProcessInput(drinkCode, quantity);
                 if (drink != null)
                 {
                     order = new Order(order, drink);

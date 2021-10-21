@@ -6,7 +6,7 @@ namespace CoffeeMachine
 {
     public class InputProcessor
     {
-        public IDrink ProcessInput(string input)
+        public IDrink ProcessInput(string input, int quantity)
         {
             string[] inputArray = input.Split(':', StringSplitOptions.RemoveEmptyEntries);
 
@@ -21,16 +21,16 @@ namespace CoffeeMachine
             switch (drinkCode)
             {
                 case "C" : 
-                    drink = new Coffee(sugarAmount, drinkTemperature);
+                    drink = new Coffee(sugarAmount, drinkTemperature, quantity);
                     break;
                 case "T" : 
-                    drink = new Tea(sugarAmount, drinkTemperature);
+                    drink = new Tea(sugarAmount, drinkTemperature, quantity);
                     break;
                 case "H" : 
-                    drink = new Chocolate(sugarAmount, drinkTemperature);
+                    drink = new Chocolate(sugarAmount, drinkTemperature, quantity);
                     break;
                 case "O" : 
-                    drink = new OrangeJuice();
+                    drink = new OrangeJuice(quantity);
                     break;
             }
 

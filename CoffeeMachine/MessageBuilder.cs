@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace CoffeeMachine
@@ -21,7 +22,7 @@ namespace CoffeeMachine
         
         private string BuildIndividualDrinkMessage(IDrink drink)
         {
-            string drinkQuantity = " 1";
+            string drinkQuantity = drink.GetQuantity().ToString();
             string sugarMessage = "";
             string sugarAmount = drink.GetSugarAmount();
             string drinkTemperature = drink.GetDrinkTemperature().ToString();
@@ -38,7 +39,7 @@ namespace CoffeeMachine
                 ? "" 
                 : " " + drinkTemperature.Replace('_', ' ');
 
-            return $"Make{drinkQuantity}{temperatureMessage}{drinkTypeMessage}{sugarMessage}\n";
+            return $"Make {drinkQuantity}{temperatureMessage}{drinkTypeMessage}{sugarMessage}\n";
         }
 
         public string BuildNotEnoughMoneyMessage(double moneyInserted, double price)

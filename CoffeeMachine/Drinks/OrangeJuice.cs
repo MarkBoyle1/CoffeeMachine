@@ -6,11 +6,15 @@ namespace CoffeeMachine.Drinks
     {
         private string _drinkType;
         private double _price;
+        private int _quantity;
 
-        public OrangeJuice()
+
+        public OrangeJuice(int quantity)
         {
             _drinkType = "Orange Juice";
             _price = 0.6;
+            _quantity = quantity;
+
         }
         
         public string GetDrinkType()
@@ -31,6 +35,11 @@ namespace CoffeeMachine.Drinks
         public DrinkTemperature GetDrinkTemperature()
         {
             return DrinkTemperature.normal;
+        }
+        
+        public int GetQuantity()
+        {
+            return _quantity;
         }
     }
 }
