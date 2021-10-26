@@ -34,9 +34,7 @@ namespace CoffeeMachine
             Report report = _reportBuilder.CreateReport(allOrders);
             DisplayReport(report);
         }
-
         
-
         public List<Order> CollectAllOrders()
         {
             List<Order> allOrders = new List<Order>();
@@ -53,7 +51,7 @@ namespace CoffeeMachine
 
         public Order CollectOneOrder()
         {
-            List<Message> input = CollectInput();
+            List<Item> input = CollectInput();
             
             double moneyInserted = CollectMoney();
             
@@ -70,9 +68,9 @@ namespace CoffeeMachine
             return order;
         }
         
-        private List<Message> CollectInput()
+        private List<Item> CollectInput()
         {
-            List<Message> order = new List<Message>();
+            List<Item> order = new List<Item>();
 
             while (StillCollectingInput())
             {
@@ -81,13 +79,13 @@ namespace CoffeeMachine
                 if (_validDrinkCodes.Contains(userResponse[0]))
                 {
                     IDrink drink = _inputProcessor.ProcessInput(userResponse);
-                    Message message = new Message(drink);
-                    order.Add(message);
+                    Item item = new Item(drink);
+                    order.Add(item);
                 }
                 else if (userResponse[0] == 'M')
                 {
-                    Message message = new Message(userResponse);
-                    order.Add(message);
+                    Item item = new Item(userResponse);
+                    order.Add(item);
                 }
                 else
                 {

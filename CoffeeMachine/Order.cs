@@ -6,7 +6,7 @@ namespace CoffeeMachine
 {
     public class Order
     {
-        public List<Message> ItemList { get; }
+        public List<Item> ItemList { get; }
         public double TotalPrice { get; }
 
         // public Order()
@@ -21,13 +21,13 @@ namespace CoffeeMachine
         //     TotalPrice = order.TotalPrice + drink.GetPrice();
         // }
         //
-        public Order(List<Message> input)
+        public Order(List<Item> input)
         {
             ItemList = input;
             TotalPrice = GetOrderPrice(input);
         }
 
-        private double GetOrderPrice(List<Message> input)
+        private double GetOrderPrice(List<Item> input)
         {
             double totalPrice = 0;
 

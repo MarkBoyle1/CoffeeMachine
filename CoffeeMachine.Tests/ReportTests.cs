@@ -68,21 +68,21 @@ namespace CoffeeMachine.Tests
 
         public Order CreateOrder(string[] input)
         {
-            List<Message> messages = new List<Message>();
+            List<Item> messages = new List<Item>();
             List<char> _validDrinkCodes = new List<char>() {'C', 'T', 'H', 'O'};
 
-            foreach (var item in input)
+            foreach (var element in input)
             {
-                if (_validDrinkCodes.Contains(item[0]))
+                if (_validDrinkCodes.Contains(element[0]))
                 {
-                    IDrink drink = _inputProcessor.ProcessInput(item);
-                    Message message = new Message(drink);
-                    messages.Add(message);
+                    IDrink drink = _inputProcessor.ProcessInput(element);
+                    Item item = new Item(drink);
+                    messages.Add(item);
                 }
-                else if (item[0] == 'M')
+                else if (element[0] == 'M')
                 {
-                    Message message = new Message(item);
-                    messages.Add(message);
+                    Item item = new Item(element);
+                    messages.Add(item);
                 }
             }
             

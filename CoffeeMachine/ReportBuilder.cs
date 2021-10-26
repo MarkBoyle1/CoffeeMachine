@@ -13,7 +13,7 @@ namespace CoffeeMachine
 
             foreach (Order order in orders)
             {
-                foreach (Message message in order.ItemList)
+                foreach (Item message in order.ItemList)
                 {
                     string itemType = message.itemType;
                     if (itemType != "Message")
@@ -21,13 +21,6 @@ namespace CoffeeMachine
                         sales[itemType] = sales.ContainsKey(itemType) ? sales[itemType] + 1 : 1;
                     }
 
-                    // sales.TryAdd(drinkType, 1) && sales[drinkType]++;
-                    // if (!sales.TryAdd(itemType, 1))
-                    // {
-                    //     sales[itemType] = sales[itemType] + 1;
-                    // }
-                    
-                    
                     totalRevenue += message.value;
                 }
             }
