@@ -11,18 +11,19 @@ namespace CoffeeMachine
         {
             StringBuilder orderMessage = new StringBuilder();
 
-            foreach (var drink in order.DrinkList)
+            foreach (var message in order.ItemList)
             {
-                string message = BuildIndividualDrinkMessage(drink);
-                orderMessage.Append(message);
+                if (message.itemType != "Message")
+                {
+                    orderMessage.Append(message.messageContent);
+                }
             }
 
             return orderMessage.ToString();
         }
         
-        private string BuildIndividualDrinkMessage(IDrink drink)
+        public string BuildIndividualDrinkMessage(IDrink drink)
         {
-            string drinkQuantity = drink.GetQuantity().ToString();
             string sugarMessage = "";
             string sugarAmount = drink.GetSugarAmount();
             string drinkTemperature = drink.GetDrinkTemperature().ToString();
@@ -39,7 +40,7 @@ namespace CoffeeMachine
                 ? "" 
                 : " " + drinkTemperature.Replace('_', ' ');
 
-            return $"Make {drinkQuantity}{temperatureMessage}{drinkTypeMessage}{sugarMessage}\n";
+            return $"Make 1{temperatureMessage}{drinkTypeMessage}{sugarMessage}\n";
         }
 
         public string BuildNotEnoughMoneyMessage(double moneyInserted, double price)

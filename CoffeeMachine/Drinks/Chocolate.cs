@@ -8,17 +8,14 @@ namespace CoffeeMachine.Drinks
         private string _sugarAmount;
         private double _price;
         private DrinkTemperature _drinkTemperature;
-        private int _quantity;
 
 
-        public Chocolate(string sugarAmount, DrinkTemperature drinkTemperature, int quantity)
+        public Chocolate(string sugarAmount, DrinkTemperature drinkTemperature)
         {
             _drinkType = "Chocolate";
             _price = 0.5;
             _sugarAmount = sugarAmount;
             _drinkTemperature = drinkTemperature;
-            _quantity = quantity;
-
         }
 
         public string GetDrinkType()
@@ -39,11 +36,6 @@ namespace CoffeeMachine.Drinks
         public DrinkTemperature GetDrinkTemperature()
         {
             return _drinkTemperature;
-        }
-        
-        public int GetQuantity()
-        {
-            return _quantity;
         }
     }
 }

@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using CoffeeMachine.Drinks;
+using CoffeeMachine.Exceptions;
 
 namespace CoffeeMachine
 {
     public class InputProcessor
     {
-        public IDrink ProcessInput(string input, int quantity)
+        public IDrink ProcessInput(string input)
         {
             string[] inputArray = input.Split(':', StringSplitOptions.RemoveEmptyEntries);
 
@@ -15,26 +16,20 @@ namespace CoffeeMachine
             DrinkTemperature drinkTemperature = inputArray[0].Contains('h') 
                     ? DrinkTemperature.extra_hot
                     : DrinkTemperature.normal;
-            
-            IDrink drink = null;
 
             switch (drinkCode)
             {
                 case "C" : 
-                    drink = new Coffee(sugarAmount, drinkTemperature, quantity);
-                    break;
+                    return new Coffee(sugarAmount, drinkTemperature);
                 case "T" : 
-                    drink = new Tea(sugarAmount, drinkTemperature, quantity);
-                    break;
+                    return new Tea(sugarAmount, drinkTemperature);
                 case "H" : 
-                    drink = new Chocolate(sugarAmount, drinkTemperature, quantity);
-                    break;
+                    return new Chocolate(sugarAmount, drinkTemperature);
                 case "O" : 
-                    drink = new OrangeJuice(quantity);
-                    break;
+                    return new OrangeJuice();
+                default:
+                    throw new InvalidInputException(drinkCode);
             }
-
-            return drink;
         }
     }
 }
