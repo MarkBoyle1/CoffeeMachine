@@ -52,19 +52,19 @@ namespace CoffeeMachine
         public Order CollectOneOrder()
         {
             List<Item> input = CollectInput();
-            
+            double orderPrice = GetOrderPrice(input);
             double moneyInserted = CollectMoney();
             
-            Order order = new Order(input);
-
-            while (moneyInserted < order.TotalPrice)
+            while (moneyInserted < orderPrice)
             {
-                RejectOrder(order, moneyInserted);
+                RejectOrder(orderPrice, moneyInserted);
                 double additionalMoney = CollectMoney();
                 moneyInserted += additionalMoney;
             }
             
+            Order order = new Order(input, orderPrice);
             SendOrderToDrinkMaker(order);
+            
             return order;
         }
         
@@ -95,6 +95,18 @@ namespace CoffeeMachine
 
             return order;
         }
+        
+        private double GetOrderPrice(List<Item> input)
+        {
+            double totalPrice = 0;
+
+            foreach (var message in input)
+            {
+                totalPrice += message.value;
+            }
+
+            return totalPrice;
+        }
 
         private void SendOrderToDrinkMaker(Order order)
         {
@@ -103,10 +115,10 @@ namespace CoffeeMachine
             _output.DisplayMessage(message);
         }
 
-        private void RejectOrder(Order order, double moneyInserted)
+        private void RejectOrder(double orderPrice, double moneyInserted)
         {
             _output = new CustomerOutput();
-            string message = _messageBuilder.BuildNotEnoughMoneyMessage(moneyInserted, order.TotalPrice);
+            string message = _messageBuilder.BuildNotEnoughMoneyMessage(moneyInserted, orderPrice);
             _output.DisplayMessage(message);
         }
 

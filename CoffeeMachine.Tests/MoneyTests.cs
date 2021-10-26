@@ -108,9 +108,23 @@ namespace CoffeeMachine.Tests
                 }
             }
             
-            Order order = new Order(messages);
+            double orderPrice = GetOrderPrice(messages);
+            
+            Order order = new Order(messages, orderPrice);
 
             return order;
+        }
+        
+        private double GetOrderPrice(List<Item> input)
+        {
+            double totalPrice = 0;
+
+            foreach (var message in input)
+            {
+                totalPrice += message.value;
+            }
+
+            return totalPrice;
         }
     }
 }
