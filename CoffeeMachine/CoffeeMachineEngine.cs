@@ -94,7 +94,7 @@ namespace CoffeeMachine
 
             foreach (var message in input)
             {
-                totalPrice += message.value;
+                totalPrice += message.Value;
             }
 
             return totalPrice;

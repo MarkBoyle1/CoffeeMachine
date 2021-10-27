@@ -15,13 +15,13 @@ namespace CoffeeMachine
             {
                 foreach (Item message in order.ItemList)
                 {
-                    string itemType = message.itemType;
+                    string itemType = message.ItemType;
                     if (itemType != "Message")
                     {
                         sales[itemType] = sales.ContainsKey(itemType) ? sales[itemType] + 1 : 1;
                     }
 
-                    totalRevenue += message.value;
+                    totalRevenue += message.Value;
                 }
             }
 

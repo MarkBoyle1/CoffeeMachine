@@ -13,7 +13,7 @@ namespace CoffeeMachine
 
             foreach (Item item in order.ItemList)
             {
-                string message = BuildIndividualMessage(item.item);
+                string message = BuildIndividualMessage(item.ItemObject);
                 orderMessage.Append(message);
             }
 

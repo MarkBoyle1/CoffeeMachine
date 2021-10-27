@@ -3,22 +3,22 @@ namespace CoffeeMachine
     public class Item
     {
         private MessageBuilder _messageBuilder = new MessageBuilder();
-        public string itemType { get; }
-        public double value { get; }
-        public dynamic item { get; }
+        public string ItemType { get; }
+        public double Value { get; }
+        public dynamic ItemObject { get; }
 
         public Item(IDrink drink)
         {
-            itemType = drink.GetDrinkType();
-            value = drink.GetPrice();
-            item = drink;
+            ItemType = drink.GetDrinkType();
+            Value = drink.GetPrice();
+            ItemObject = drink;
         }
 
         public Item(string input)
         {
-            itemType = "Message";
-            value = 0;
-            item = new Message(input);
+            ItemType = "Message";
+            Value = 0;
+            ItemObject = new Message(input);
         }
     }
 }
