@@ -7,6 +7,22 @@ namespace CoffeeMachine
 {
     public class InputProcessor
     {
+        public Item CreateItem(string input)
+        {
+            List<char> _validDrinkCodes = new List<char>() {'C', 'T', 'H', 'O'};
+            
+            if (_validDrinkCodes.Contains(input[0]))
+            {
+                IDrink drink = ProcessInput(input);
+                return new Item(drink);
+            }
+            if (input[0] == 'M')
+            {
+                return new Item(input);
+            }
+            
+            throw new InvalidInputException(input);
+        }
         public IDrink ProcessInput(string input)
         {
             string[] inputArray = input.Split(':', StringSplitOptions.RemoveEmptyEntries);

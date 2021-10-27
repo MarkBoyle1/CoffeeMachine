@@ -13,7 +13,6 @@ namespace CoffeeMachine
         private MessageBuilder _messageBuilder;
         private IOutput _output;
         private IUserInput _userInput;
-        private List<char> _validDrinkCodes;
         private ReportBuilder _reportBuilder;
 
         public CoffeeMachineEngine(IUserInput userInput)
@@ -23,7 +22,6 @@ namespace CoffeeMachine
             _inputProcessor = new InputProcessor();
             _messageBuilder = new MessageBuilder();
             _reportBuilder = new ReportBuilder();
-            _validDrinkCodes = new List<char>() {'C', 'T', 'H', 'O'};
         }
 
         public void RunProgram()
@@ -76,18 +74,12 @@ namespace CoffeeMachine
             {
                 string userResponse = _userInput.GetUserResponse();
 
-                if (_validDrinkCodes.Contains(userResponse[0]))
+                try
                 {
-                    IDrink drink = _inputProcessor.ProcessInput(userResponse);
-                    Item item = new Item(drink);
+                    Item item = _inputProcessor.CreateItem(userResponse);
                     order.Add(item);
                 }
-                else if (userResponse[0] == 'M')
-                {
-                    Item item = new Item(userResponse);
-                    order.Add(item);
-                }
-                else
+                catch (InvalidInputException)
                 {
                     _output.DisplayMessage(OutputMessages.InvalidInput);
                 }
