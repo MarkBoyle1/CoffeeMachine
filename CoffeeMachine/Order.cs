@@ -6,19 +6,13 @@ namespace CoffeeMachine
 {
     public class Order
     {
-        public List<IDrink> DrinkList { get; }
+        public List<Item> ItemList { get; }
         public double TotalPrice { get; }
-
-        public Order()
+        
+        public Order(List<Item> input, double totalPrice)
         {
-            DrinkList = new List<IDrink>();
-            TotalPrice = 0;
-        }
-        public Order(Order order, IDrink drink)
-        {
-            DrinkList = new List<IDrink>(order.DrinkList);
-            DrinkList.Add(drink);
-            TotalPrice = order.TotalPrice + drink.GetPrice() * drink.GetQuantity();
+            ItemList = input;
+            TotalPrice = totalPrice;
         }
     }
 }
