@@ -25,7 +25,7 @@ namespace CoffeeMachine
                 }
             }
 
-            sales["Total Revenue"] = totalRevenue;
+            sales["Total Revenue"] = Math.Round(totalRevenue, 1);
             return new Report(sales);
         }
     }

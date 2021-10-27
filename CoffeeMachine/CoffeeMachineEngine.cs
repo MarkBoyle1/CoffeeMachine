@@ -24,16 +24,18 @@ namespace CoffeeMachine
             _reportBuilder = new ReportBuilder();
         }
 
-        public void RunProgram()
+        public Report RunProgram()
         {
             _output.DisplayMessage(OutputMessages.Welcome);
             List<Order> allOrders = CollectAllOrders();
             
             Report report = _reportBuilder.CreateReport(allOrders);
             DisplayReport(report);
+            
+            return report;
         }
         
-        public List<Order> CollectAllOrders()
+        private List<Order> CollectAllOrders()
         {
             List<Order> allOrders = new List<Order>();
             
@@ -47,7 +49,7 @@ namespace CoffeeMachine
             return allOrders;
         }
 
-        public Order CollectOneOrder()
+        private Order CollectOneOrder()
         {
             List<Item> input = CollectInput();
             double orderPrice = GetOrderPrice(input);

@@ -2,7 +2,6 @@ namespace CoffeeMachine
 {
     public class Item
     {
-        private MessageBuilder _messageBuilder = new MessageBuilder();
         public string ItemType { get; }
         public double Value { get; }
         public dynamic ItemObject { get; }
