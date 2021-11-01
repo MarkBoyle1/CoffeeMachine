@@ -39,7 +39,7 @@ namespace CoffeeMachine.Tests
         [Fact]
         public void given_inputEqualsOneOrderWithTandCh_when_RunProgram_then_returns_resultsWithOneTeaAndOneCoffee()
         {
-            _listOfResponses = new List<string>() {"T::", "Ch:1:0", "1.0"};
+            _listOfResponses = new List<string>() {"T::", "Hh:1:0", "0.9"};
             _listOfDecisions = new List<string>() {"y", "y", "y", "n", "n"};
             _coffeeMachineEngine = new CoffeeMachineEngine(new TestUserInput(_listOfResponses, _listOfDecisions));
 
@@ -48,8 +48,8 @@ namespace CoffeeMachine.Tests
             Dictionary<string, double> expectedResults = new Dictionary<string, double>()
             {
                 {"Tea", 1},
-                {"Coffee", 1},
-                {"Total Revenue", 1}
+                {"Chocolate", 1},
+                {"Total Revenue", 0.9}
             };
             
             Assert.Equal(expectedResults, report._results);
@@ -58,7 +58,7 @@ namespace CoffeeMachine.Tests
         [Fact]
         public void given_inputEqualsOneOrderWithThreeDifferentCoffees_when_RunProgram_then_returns_resultsWithOneThreeCoffees()
         {
-            _listOfResponses = new List<string>() {"C::", "Ch:1:0", "C:1:0", "1.8"};
+            _listOfResponses = new List<string>() {"H::", "Hh:1:0", "H:1:0", "1.5"};
             _listOfDecisions = new List<string>() {"y", "y", "y", "y", "n", "n"};
             _coffeeMachineEngine = new CoffeeMachineEngine(new TestUserInput(_listOfResponses, _listOfDecisions));
 
@@ -66,8 +66,8 @@ namespace CoffeeMachine.Tests
 
             Dictionary<string, double> expectedResults = new Dictionary<string, double>()
             {
-                {"Coffee", 3},
-                {"Total Revenue", 1.8}
+                {"Chocolate", 3},
+                {"Total Revenue", 1.5}
             };
             
             Assert.Equal(expectedResults, report._results);

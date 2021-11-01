@@ -10,6 +10,7 @@ namespace CoffeeMachine.Output
         public static readonly string Report = "Report:";
         public static readonly string Welcome = "Welcome to the Coffee Machine!";
         public static readonly string InvalidInput = "Invalid input.";
-        
+        public static readonly string SendingEmailNotification = "Sending Email Notification to request machine refill";
+        public static readonly string OrderNotPossible = "The order cannot be made due to the following ingredients being out of stock:";
     }
 }

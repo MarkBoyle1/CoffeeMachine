@@ -13,16 +13,18 @@ namespace CoffeeMachine
 
             foreach (Order order in orders)
             {
-                foreach (Item message in order.ItemList)
+                if (order.PossibleToMake)
                 {
-                    string itemType = message.ItemType;
-                    if (itemType != "Message")
+                    foreach (IDrink drink in order.DrinkList)
                     {
-                        sales[itemType] = sales.ContainsKey(itemType) ? sales[itemType] + 1 : 1;
-                    }
+                        string drinkType = drink.GetDrinkType();
+                        sales[drinkType] = sales.ContainsKey(drinkType) ? sales[drinkType] + 1 : 1;
+                    
 
-                    totalRevenue += message.Value;
+                        totalRevenue += drink.GetPrice();
+                    }
                 }
+                
             }
 
             sales["Total Revenue"] = Math.Round(totalRevenue, 1);

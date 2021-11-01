@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.Globalization;
+using CoffeeMachine.Ingredients;
 
 namespace CoffeeMachine.Drinks
 {
@@ -6,12 +8,16 @@ namespace CoffeeMachine.Drinks
     {
         private string _drinkType;
         private double _price;
-
-
+        private List<IIngredient> _ingredients;
+        
         public OrangeJuice()
         {
             _drinkType = "Orange Juice";
             _price = 0.6;
+            _ingredients = new List<IIngredient>()
+            {
+                new Oranges()
+            };
 
         }
         
@@ -33,6 +39,11 @@ namespace CoffeeMachine.Drinks
         public DrinkTemperature GetDrinkTemperature()
         {
             return DrinkTemperature.normal;
+        }
+        
+        public List<IIngredient> GetIngredientList()
+        {
+            return _ingredients;
         }
     }
 }

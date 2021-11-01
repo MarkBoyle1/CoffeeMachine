@@ -9,64 +9,56 @@ namespace CoffeeMachine.Tests
         [Fact]
         public void given_inputEqualsT_when_CreateItem_then_GetDrinkType_returns_Tea()
         {
-            Item item = _inputProcessor.CreateItem("T::");
+            Order order = new Order();
+            order = _inputProcessor.AddInputToOrder("T::", order);
 
-            Assert.Equal("Tea", item.ItemType);
+            IDrink drink = order.DrinkList[0];
+
+            Assert.Equal("Tea", drink.GetDrinkType());
         }
         
         [Fact]
         public void given_inputEqualsH_when_CreateItem_then_GetDrinkType_returns_Chocolate()
         {
-            Item item = _inputProcessor.CreateItem("H::");
-            
-            Assert.Equal("Chocolate", item.ItemType);
+            Order order = new Order();
+            order = _inputProcessor.AddInputToOrder("H::", order);
+
+            IDrink drink = order.DrinkList[0];
+
+            Assert.Equal("Chocolate", drink.GetDrinkType());
         }
         
         [Fact]
         public void given_inputEqualsT_when_CreateItem_then_GetSugarAmount_returns_0()
         {
-            Item item = _inputProcessor.CreateItem("T::");
+            Order order = new Order();
+            order = _inputProcessor.AddInputToOrder("T::", order);
 
-            IDrink drink = item.ItemObject;
-            
+            IDrink drink = order.DrinkList[0];
+
             Assert.Equal("0", drink.GetSugarAmount());
         }
         
         [Fact]
         public void given_inputEqualsT1_when_CreateItem_then_GetSugarAmount_returns_1()
         {
-            Item item = _inputProcessor.CreateItem("T:1:0");
-            
-            IDrink drink = item.ItemObject;
-            
+            Order order = new Order();
+            order = _inputProcessor.AddInputToOrder("T:1:0", order);
+
+            IDrink drink = order.DrinkList[0];
+
             Assert.Equal("1", drink.GetSugarAmount());
         }
         
         [Fact]
         public void given_inputIsAMessage_when_CreateItem_then_ItemType_returns_Message()
         {
-            Item item = _inputProcessor.CreateItem("M:TestMessage");
+            Order order = new Order();
+            order = _inputProcessor.AddInputToOrder("M:TestMessage", order);
 
-            Assert.Equal("Message", item.ItemType);
-        }
-        
-        [Fact]
-        public void given_inputIsAMessage_when_CreateItem_then_ItemValue_returns_0()
-        {
-            Item item = _inputProcessor.CreateItem("M:TestMessage");
-
-            Assert.Equal(0, item.Value);
-        }
-        
-        [Fact]
-        public void given_inputIsAMessage_when_CreateItem_then_ItemObject_returns_MessageContent()
-        {
-            Item item = _inputProcessor.CreateItem("M:TestMessage");
-
-            Message message = item.ItemObject;
+            Message message = order.MessageList[0];
 
             Assert.Equal("M:TestMessage", message.content);
         }
-
     }
 }

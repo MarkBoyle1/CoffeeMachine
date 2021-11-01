@@ -11,9 +11,15 @@ namespace CoffeeMachine
         {
             StringBuilder orderMessage = new StringBuilder();
 
-            foreach (Item item in order.ItemList)
+            foreach (IDrink drink in order.DrinkList)
             {
-                string message = BuildIndividualMessage(item.ItemObject);
+                string message = BuildIndividualMessage(drink);
+                orderMessage.Append(message);
+            }
+            
+            foreach (Message messageContent in order.MessageList)
+            {
+                string message = BuildIndividualMessage(messageContent);
                 orderMessage.Append(message);
             }
 

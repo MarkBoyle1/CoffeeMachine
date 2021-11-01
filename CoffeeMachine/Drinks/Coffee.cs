@@ -1,4 +1,7 @@
+using System.Collections.Generic;
 using System.Text;
+using CoffeeMachine.Ingredients;
+using Enum = System.Enum;
 
 namespace CoffeeMachine.Drinks
 {
@@ -8,6 +11,8 @@ namespace CoffeeMachine.Drinks
         private string _sugarAmount;
         private double _price;
         private DrinkTemperature _drinkTemperature;
+        private List<IIngredient> _ingredients;
+
 
 
         public Coffee(string sugarAmount, DrinkTemperature drinkTemperature)
@@ -16,6 +21,12 @@ namespace CoffeeMachine.Drinks
             _price = 0.6;
             _sugarAmount = sugarAmount;
             _drinkTemperature = drinkTemperature;
+            _ingredients = new List<IIngredient>()
+            {
+                new CoffeeBeans(),
+                new Water(),
+                new Milk()
+            };
 
         }
         
@@ -37,6 +48,11 @@ namespace CoffeeMachine.Drinks
         public DrinkTemperature GetDrinkTemperature()
         {
             return _drinkTemperature;
+        }
+        
+        public List<IIngredient> GetIngredientList()
+        {
+            return _ingredients;
         }
     }
 }

@@ -28,18 +28,14 @@ namespace CoffeeMachine.Tests
         [Fact]
         public void given_twoOrderContainsThreeDrinksEach_when_CreateReport_then_return_reportWithDictionaryOfSales1()
         {
-            List<Item> itemList = new List<Item>()
-            {
-                new Item(_sampleDrinks[0]),
-                new Item(_sampleDrinks[1]),
-                new Item(_sampleDrinks[2]),
-                new Item(_sampleDrinks[3])
-            };
+            Order order = new Order();
+            
+            order = new Order(order, _sampleDrinks[0]);
+            order = new Order(order, _sampleDrinks[1]);
+            order = new Order(order, _sampleDrinks[2]);
+            order = new Order(order, _sampleDrinks[3]);
 
-            List<Order> orders = new List<Order>()
-            {
-                new Order(itemList, 2.2)
-            };
+            List<Order> orders = new List<Order>() {order};
         
             Report report = _reportBuilder.CreateReport(orders);
         
@@ -56,18 +52,14 @@ namespace CoffeeMachine.Tests
         [Fact]
         public void given_twoOrderContainsThreeDrinksEach_when_CreateReport_then_return_reportWithDictionaryOfSales2()
         {
-            List<Item> itemList = new List<Item>()
-            {
-                new Item(_sampleDrinks[3]),
-                new Item(_sampleDrinks[4]),
-                new Item(_sampleDrinks[5]),
-                new Item(_sampleDrinks[6])
-            };
+            Order order = new Order();
+            
+            order = new Order(order, _sampleDrinks[3]);
+            order = new Order(order, _sampleDrinks[4]);
+            order = new Order(order, _sampleDrinks[5]);
+            order = new Order(order, _sampleDrinks[6]);
 
-            List<Order> orders = new List<Order>()
-            {
-                new Order(itemList, 2)
-            };
+            List<Order> orders = new List<Order>() {order};
         
             Report report = _reportBuilder.CreateReport(orders);
         
@@ -85,26 +77,24 @@ namespace CoffeeMachine.Tests
         [Fact]
         public void given_twoOrderContainsThreeDrinksEach_when_CreateReport_then_return_reportWithDictionaryOfSales3()
         {
-            List<Item> itemList1 = new List<Item>()
-            {
-                new Item(_sampleDrinks[3]),
-                new Item(_sampleDrinks[4]),
-                new Item(_sampleDrinks[5]),
-                new Item(_sampleDrinks[6])
-            };
+            Order order1 = new Order();
             
-            List<Item> itemList2 = new List<Item>()
-            {
-                new Item(_sampleDrinks[0]),
-                new Item(_sampleDrinks[0]),
-                new Item(_sampleDrinks[4]),
-                new Item(_sampleDrinks[6])
-            };
+            order1 = new Order(order1, _sampleDrinks[0]);
+            order1 = new Order(order1, _sampleDrinks[1]);
+            order1 = new Order(order1, _sampleDrinks[2]);
+            order1 = new Order(order1, _sampleDrinks[3]);
+            
+            Order order2 = new Order();
+            
+            order2 = new Order(order2, _sampleDrinks[0]);
+            order2 = new Order(order2, _sampleDrinks[0]);
+            order2 = new Order(order2, _sampleDrinks[4]);
+            order2 = new Order(order2, _sampleDrinks[6]);
 
             List<Order> orders = new List<Order>()
             {
-                new Order(itemList1, 2),
-                new Order(itemList2, 2)
+                order1,
+                order2
 
             };
         
@@ -112,11 +102,11 @@ namespace CoffeeMachine.Tests
         
             Dictionary<string, double> results = new Dictionary<string, double>()
             {
-                {"Coffee", 1},
-                {"Tea", 3},
-                {"Orange Juice", 2},
-                {"Chocolate", 2},
-                {"Total Revenue", 4}
+                {"Coffee", 2},
+                {"Tea", 1},
+                {"Orange Juice", 1},
+                {"Chocolate", 4},
+                {"Total Revenue", 4.2}
             };
         
             Assert.Equal(results, report._results);

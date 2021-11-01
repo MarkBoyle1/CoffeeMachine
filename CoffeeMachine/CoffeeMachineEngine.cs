@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using CoffeeMachine.Exceptions;
+using CoffeeMachine.Ingredients;
 using CoffeeMachine.Output;
 
 namespace CoffeeMachine
@@ -14,6 +15,8 @@ namespace CoffeeMachine
         private IOutput _output;
         private IUserInput _userInput;
         private ReportBuilder _reportBuilder;
+        private IEmailNotifier _emailNotifier;
+        private IngredientQuantityChecker _ingredientQuantityChecker;
 
         public CoffeeMachineEngine(IUserInput userInput)
         {
@@ -22,6 +25,8 @@ namespace CoffeeMachine
             _inputProcessor = new InputProcessor();
             _messageBuilder = new MessageBuilder();
             _reportBuilder = new ReportBuilder();
+            _emailNotifier = new EmailNotifier();
+            _ingredientQuantityChecker = new IngredientQuantityChecker();
         }
 
         public Report RunProgram()
@@ -48,11 +53,27 @@ namespace CoffeeMachine
 
             return allOrders;
         }
+        
+        private bool StillPlacingOrders()
+        {
+            _output = new CustomerOutput();
+            _output.DisplayMessage(OutputMessages.AddMoreOrders);
+            return _userInput.GetUserDecision();
+        }
 
         private Order CollectOneOrder()
         {
-            List<Item> input = CollectInput();
-            double orderPrice = GetOrderPrice(input);
+            Order order = CollectInput();
+
+            List<IIngredient> emptyIngredients = _ingredientQuantityChecker.CheckForEmptyIngredients(order);
+
+            if (emptyIngredients.Count > 0)
+            {
+                _emailNotifier.notifyMissingIngredients(emptyIngredients);
+                return new Order(order);
+            }
+            
+            double orderPrice = GetOrderPrice(order);
             double moneyInserted = CollectMoney();
             
             while (moneyInserted < orderPrice)
@@ -62,15 +83,26 @@ namespace CoffeeMachine
                 moneyInserted += additionalMoney;
             }
             
-            Order order = new Order(input, orderPrice);
             SendOrderToDrinkMaker(order);
             
             return order;
         }
         
-        private List<Item> CollectInput()
+        private double GetOrderPrice(Order order)
         {
-            List<Item> order = new List<Item>();
+            double totalPrice = 0;
+
+            foreach (var drink in order.DrinkList)
+            {
+                totalPrice += drink.GetPrice();
+            }
+
+            return totalPrice;
+        }
+        
+        private Order CollectInput()
+        {
+            Order order = new Order();
 
             while (StillCollectingInput())
             {
@@ -78,8 +110,7 @@ namespace CoffeeMachine
 
                 try
                 {
-                    Item item = _inputProcessor.CreateItem(userResponse);
-                    order.Add(item);
+                    order = _inputProcessor.AddInputToOrder(userResponse, order);
                 }
                 catch (InvalidInputException)
                 {
@@ -90,16 +121,11 @@ namespace CoffeeMachine
             return order;
         }
         
-        private double GetOrderPrice(List<Item> input)
+        private bool StillCollectingInput()
         {
-            double totalPrice = 0;
-
-            foreach (var message in input)
-            {
-                totalPrice += message.Value;
-            }
-
-            return totalPrice;
+            _output = new CustomerOutput();
+            _output.DisplayMessage(OutputMessages.AddMoreDrinks);
+            return _userInput.GetUserDecision();
         }
 
         private void SendOrderToDrinkMaker(Order order)
@@ -116,25 +142,11 @@ namespace CoffeeMachine
             _output.DisplayMessage(message);
         }
 
-        private bool StillPlacingOrders()
-        {
-            _output = new CustomerOutput();
-            _output.DisplayMessage(OutputMessages.AddMoreOrders);
-            return _userInput.GetUserDecision();
-        }
-
         private double CollectMoney()
         {
             _output.DisplayMessage(OutputMessages.InsertMoney);
             string moneyInserted = _userInput.GetUserResponse();
             return Convert.ToDouble(moneyInserted);
-        }
-
-        private bool StillCollectingInput()
-        {
-            _output = new CustomerOutput();
-            _output.DisplayMessage(OutputMessages.AddMoreDrinks);
-            return _userInput.GetUserDecision();
         }
 
         private void DisplayReport(Report report)

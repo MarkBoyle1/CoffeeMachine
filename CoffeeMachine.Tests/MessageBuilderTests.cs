@@ -84,15 +84,12 @@ namespace CoffeeMachine.Tests
         [Fact]
         public void given_OrderContainsFourDrinks_when_BuildOrderMessage_then_returns_CorrectMessage()
         {
-            List<Item> itemList = new List<Item>()
-            {
-                new Item(_sampleDrinks[0]),
-                new Item(_sampleDrinks[1]),
-                new Item(_sampleDrinks[2]),
-                new Item(_sampleDrinks[3])
-            };
+            Order order = new Order();
             
-            Order order = new Order(itemList, 2.2);
+            order = new Order(order, _sampleDrinks[0]);
+            order = new Order(order, _sampleDrinks[1]);
+            order = new Order(order, _sampleDrinks[2]);
+            order = new Order(order, _sampleDrinks[3]);
             
             string message = _messageBuilder.BuildOrderMessage(order);
 
@@ -107,22 +104,21 @@ namespace CoffeeMachine.Tests
         [Fact]
         public void given_OrderContainsThreeDrinksAndAMessage_when_BuildOrderMessage_then_returns_CorrectMessage()
         {
-            List<Item> itemList = new List<Item>()
-            {
-                new Item(_sampleDrinks[0]),
-                new Item("M:No Milk Available"),
-                new Item(_sampleDrinks[2]),
-                new Item(_sampleDrinks[3])
-            };
+            Message messageContent = new Message("M:No Milk Available");
             
-            Order order = new Order(itemList, 2.2);
+            Order order = new Order();
+            
+            order = new Order(order, _sampleDrinks[0]);
+            order = new Order(order, messageContent);
+            order = new Order(order, _sampleDrinks[2]);
+            order = new Order(order, _sampleDrinks[3]);
             
             string message = _messageBuilder.BuildOrderMessage(order);
 
             string expectedMessage = "Make 1 Chocolate with no sugar and no stick\n" +
-                                     "No Milk Available\n" +
                                      "Make 1 extra hot Coffee with 2 sugar and a stick\n" +
-                                     "Make 1 Coffee with no sugar and no stick\n";
+                                     "Make 1 Coffee with no sugar and no stick\n" +
+                                     "No Milk Available\n";
 
             Assert.Equal(expectedMessage, message);
         }

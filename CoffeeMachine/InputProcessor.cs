@@ -1,29 +1,37 @@
 using System;
 using System.Collections.Generic;
-using CoffeeMachine.Drinks;
 using CoffeeMachine.Exceptions;
+using CoffeeMachine.Ingredients;
+using Chocolate = CoffeeMachine.Drinks.Chocolate;
+using Coffee = CoffeeMachine.Drinks.Coffee;
+using OrangeJuice = CoffeeMachine.Drinks.OrangeJuice;
+using Tea = CoffeeMachine.Drinks.Tea;
 
 namespace CoffeeMachine
 {
     public class InputProcessor
     {
-        public Item CreateItem(string input)
+        public Order AddInputToOrder(string input, Order order)
         {
             List<char> _validDrinkCodes = new List<char>() {'C', 'T', 'H', 'O'};
-            
-            if (_validDrinkCodes.Contains(input[0]))
+            bool isDrink = _validDrinkCodes.Contains(input[0]);
+            bool isMessage = input[0] == 'M';
+
+            if (isDrink)
             {
                 IDrink drink = ProcessInput(input);
-                return new Item(drink);
+                return new Order(order, drink);
             }
-            if (input[0] == 'M')
+            if (isMessage)
             {
-                return new Item(input);
+                Message message = new Message(input);
+                return new Order(order, message);
             }
             
             throw new InvalidInputException(input);
         }
-        public IDrink ProcessInput(string input)
+
+        private IDrink ProcessInput(string input)
         {
             string[] inputArray = input.Split(':', StringSplitOptions.RemoveEmptyEntries);
 
