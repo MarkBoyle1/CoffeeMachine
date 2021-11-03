@@ -44,7 +44,7 @@ namespace CoffeeMachine
         {
             List<Order> allOrders = new List<Order>();
             
-            while (StillPlacingOrders())
+            while (StillCollectingInput(OutputMessages.AddMoreOrders))
             {
                 Order order = CollectOneOrder();
                 
@@ -52,13 +52,6 @@ namespace CoffeeMachine
             }
 
             return allOrders;
-        }
-        
-        private bool StillPlacingOrders()
-        {
-            _output = new CustomerOutput();
-            _output.DisplayMessage(OutputMessages.AddMoreOrders);
-            return _userInput.GetUserDecision();
         }
 
         private Order CollectOneOrder()
@@ -104,8 +97,9 @@ namespace CoffeeMachine
         {
             Order order = new Order();
 
-            while (StillCollectingInput())
+            while (StillCollectingInput(OutputMessages.AddMoreDrinks))
             {
+                _output.DisplayMessage(OutputMessages.EnterInput);
                 string userResponse = _userInput.GetUserResponse();
 
                 try
@@ -115,17 +109,26 @@ namespace CoffeeMachine
                 catch (InvalidInputException)
                 {
                     _output.DisplayMessage(OutputMessages.InvalidInput);
+                    _output.DisplayMessage(OutputMessages.DrinkNotAdded);
                 }
             }
 
             return order;
         }
         
-        private bool StillCollectingInput()
+        private bool StillCollectingInput(string message)
         {
             _output = new CustomerOutput();
-            _output.DisplayMessage(OutputMessages.AddMoreDrinks);
-            return _userInput.GetUserDecision();
+            _output.DisplayMessage(message);
+            string response = _userInput.GetUserDecision();
+
+            while (response != "y" && response != "n")
+            {
+                _output.DisplayMessage(OutputMessages.InvalidInput);
+                _output.DisplayMessage(OutputMessages.PleaseTryAgain);
+                response = _userInput.GetUserDecision();
+            }
+            return response == "y";
         }
 
         private void SendOrderToDrinkMaker(Order order)
@@ -146,6 +149,15 @@ namespace CoffeeMachine
         {
             _output.DisplayMessage(OutputMessages.InsertMoney);
             string moneyInserted = _userInput.GetUserResponse();
+            double number;
+
+            while (!double.TryParse(moneyInserted, out number))
+            {
+                _output.DisplayMessage(OutputMessages.InvalidInput);
+                _output.DisplayMessage(OutputMessages.PleaseTryAgain);
+                moneyInserted = _userInput.GetUserResponse();
+            }
+            
             return Convert.ToDouble(moneyInserted);
         }
 

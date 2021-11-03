@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using CoffeeMachine.Exceptions;
 using CoffeeMachine.Ingredients;
+using CoffeeMachine.Output;
 using Chocolate = CoffeeMachine.Drinks.Chocolate;
 using Coffee = CoffeeMachine.Drinks.Coffee;
 using OrangeJuice = CoffeeMachine.Drinks.OrangeJuice;
@@ -17,17 +18,19 @@ namespace CoffeeMachine
         private const string OrangeJuice = "O";
         private const string ExtraHot = "h";
         private const string Message = "M";
+        private IOutput _output = new CustomerOutput();
 
         public Order AddInputToOrder(string input, Order order)
         {
             List<string> _validDrinkCodes = new List<string>() {Coffee, Tea, Chocolate, OrangeJuice};
             
-            bool isDrink = _validDrinkCodes.Contains(input[0].ToString());
-            bool isMessage = input[0].ToString() == Message;
+            bool isDrink = _validDrinkCodes.Contains(input[0].ToString().ToUpper());
+            bool isMessage = input[0].ToString().ToUpper() == Message;
 
             if (isDrink)
             {
                 IDrink drink = ProcessInput(input);
+                _output.DisplayMessage(OutputMessages.SuccessfullyAdded);
                 return new Order(order, drink);
             }
             if (isMessage)
@@ -43,7 +46,7 @@ namespace CoffeeMachine
         {
             string[] inputArray = input.Split(':', StringSplitOptions.RemoveEmptyEntries);
 
-            string drinkCode = input[0].ToString();
+            string drinkCode = input[0].ToString().ToUpper();
             string sugarAmount = inputArray.Length > 1 ? inputArray[1] : "0";
             DrinkTemperature drinkTemperature = inputArray[0].Contains(ExtraHot) 
                     ? DrinkTemperature.ExtraHot

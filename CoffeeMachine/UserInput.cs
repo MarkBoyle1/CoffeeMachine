@@ -9,10 +9,9 @@ namespace CoffeeMachine
             return Console.ReadLine();
         }
 
-        public bool GetUserDecision()
+        public string GetUserDecision()
         {
-            string decision = Console.ReadLine();
-            return decision == "y";
+            return Console.ReadLine();
         }
     }
 }

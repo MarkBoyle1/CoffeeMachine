@@ -11,7 +11,6 @@ namespace CoffeeMachine.Tests
         private IngredientQuantityChecker _ingredientQuantityChecker = new IngredientQuantityChecker();
         private List<IDrink> _sampleDrinks;
 
-
         public IngredientQuantityCheckerTests()
         {
             _sampleDrinks = new List<IDrink>()

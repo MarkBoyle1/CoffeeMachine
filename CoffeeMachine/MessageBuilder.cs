@@ -42,7 +42,7 @@ namespace CoffeeMachine
 
             string temperatureMessage = drinkTemperature == DrinkTemperature.Normal
                 ? "" 
-                : "extra hot";
+                : " extra hot";
 
             return $"Make 1{temperatureMessage}{drinkTypeMessage}{sugarMessage}\n";
         }
