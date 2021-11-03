@@ -16,12 +16,12 @@ namespace CoffeeMachine.Tests
         {
             _sampleDrinks = new List<IDrink>()
             {
-                new Chocolate("0", DrinkTemperature.normal),
-                new Chocolate("1", DrinkTemperature.extra_hot),
-                new Coffee("2", DrinkTemperature.extra_hot),
-                new Coffee("0", DrinkTemperature.normal),
-                new Tea("1", DrinkTemperature.normal),
-                new Tea("0", DrinkTemperature.extra_hot),
+                new Chocolate("0", DrinkTemperature.Normal),
+                new Chocolate("1", DrinkTemperature.ExtraHot),
+                new Coffee("2", DrinkTemperature.ExtraHot),
+                new Coffee("0", DrinkTemperature.Normal),
+                new Tea("1", DrinkTemperature.Normal),
+                new Tea("0", DrinkTemperature.ExtraHot),
                 new OrangeJuice()
             };
         }

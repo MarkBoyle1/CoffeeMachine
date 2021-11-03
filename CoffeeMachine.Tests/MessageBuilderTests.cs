@@ -13,12 +13,12 @@ namespace CoffeeMachine.Tests
         {
             _sampleDrinks = new List<IDrink>()
             {
-                new Chocolate("0", DrinkTemperature.normal),
-                new Chocolate("1", DrinkTemperature.extra_hot),
-                new Coffee("2", DrinkTemperature.extra_hot),
-                new Coffee("0", DrinkTemperature.normal),
-                new Tea("1", DrinkTemperature.normal),
-                new Tea("0", DrinkTemperature.extra_hot),
+                new Chocolate("0", DrinkTemperature.Normal),
+                new Chocolate("1", DrinkTemperature.ExtraHot),
+                new Coffee("2", DrinkTemperature.ExtraHot),
+                new Coffee("0", DrinkTemperature.Normal),
+                new Tea("1", DrinkTemperature.Normal),
+                new Tea("0", DrinkTemperature.ExtraHot),
                 new OrangeJuice()
             };
         }
@@ -26,7 +26,7 @@ namespace CoffeeMachine.Tests
         [Fact]
         public void given_drinkEqualsCh1_when_BuildIndividualMessage_then_returns_Make_1_extra_hot_Chocolate_with_1_sugar_and_a_stick()
         {
-            IDrink drink = new Chocolate("1", DrinkTemperature.extra_hot);
+            IDrink drink = new Chocolate("1", DrinkTemperature.ExtraHot);
 
             string message = _messageBuilder.BuildIndividualMessage(drink);
 
@@ -36,7 +36,7 @@ namespace CoffeeMachine.Tests
         [Fact]
         public void given_drinkEqualsC1_when_BuildIndividualMessage_then_returns_Make_1_Chocolate_with_1_sugar_and_a_stick()
         {
-            IDrink drink = new Chocolate("1", DrinkTemperature.normal);
+            IDrink drink = new Chocolate("1", DrinkTemperature.Normal);
 
             string message = _messageBuilder.BuildIndividualMessage(drink);
 
@@ -46,7 +46,7 @@ namespace CoffeeMachine.Tests
         [Fact]
         public void given_drinkEqualsT_when_BuildIndividualMessage_then_returns_Make_1_Tea_with_no_sugar_and_no_stick()
         {
-            IDrink drink = new Tea("0", DrinkTemperature.normal);
+            IDrink drink = new Tea("0", DrinkTemperature.Normal);
 
             string message = _messageBuilder.BuildIndividualMessage(drink);
 
@@ -76,9 +76,9 @@ namespace CoffeeMachine.Tests
         [Fact]
         public void given_OrderPriceEquals1point2_and_moneyInsertEquals0point8_when_BuildNotEnoughMoneyMessage_then_returns_CorrectMessage()
         {
-            string message = _messageBuilder.BuildNotEnoughMoneyMessage(0.8, 1.2);
+            OrderMessage message = _messageBuilder.BuildNotEnoughMoneyMessage(0.8, 1.2);
 
-            Assert.Equal("Sorry, not enough money has been inserted. 0.4 more needed.", message);
+            Assert.Equal("Sorry, not enough money has been inserted. 0.4 more needed.", message.content);
         }
         
         [Fact]
@@ -91,14 +91,14 @@ namespace CoffeeMachine.Tests
             order = new Order(order, _sampleDrinks[2]);
             order = new Order(order, _sampleDrinks[3]);
             
-            string message = _messageBuilder.BuildOrderMessage(order);
+            OrderMessage message = _messageBuilder.BuildOrderMessage(order);
 
             string expectedMessage = "Make 1 Chocolate with no sugar and no stick\n" +
                                      "Make 1 extra hot Chocolate with 1 sugar and a stick\n" +
                                      "Make 1 extra hot Coffee with 2 sugar and a stick\n" +
                                      "Make 1 Coffee with no sugar and no stick\n";
 
-            Assert.Equal(expectedMessage, message);
+            Assert.Equal(expectedMessage, message.content);
         }
         
         [Fact]
@@ -113,14 +113,14 @@ namespace CoffeeMachine.Tests
             order = new Order(order, _sampleDrinks[2]);
             order = new Order(order, _sampleDrinks[3]);
             
-            string message = _messageBuilder.BuildOrderMessage(order);
+            OrderMessage message = _messageBuilder.BuildOrderMessage(order);
 
             string expectedMessage = "Make 1 Chocolate with no sugar and no stick\n" +
                                      "Make 1 extra hot Coffee with 2 sugar and a stick\n" +
                                      "Make 1 Coffee with no sugar and no stick\n" +
                                      "No Milk Available\n";
 
-            Assert.Equal(expectedMessage, message);
+            Assert.Equal(expectedMessage, message.content);
         }
     }
 }

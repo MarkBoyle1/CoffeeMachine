@@ -131,15 +131,15 @@ namespace CoffeeMachine
         private void SendOrderToDrinkMaker(Order order)
         {
             _output = new DrinkMakerOutput();
-            string message = _messageBuilder.BuildOrderMessage(order);
-            _output.DisplayMessage(message);
+            OrderMessage message = _messageBuilder.BuildOrderMessage(order);
+            _output.DisplayMessage(message.content);
         }
 
         private void RejectOrder(double orderPrice, double moneyInserted)
         {
             _output = new CustomerOutput();
-            string message = _messageBuilder.BuildNotEnoughMoneyMessage(moneyInserted, orderPrice);
-            _output.DisplayMessage(message);
+            OrderMessage message = _messageBuilder.BuildNotEnoughMoneyMessage(moneyInserted, orderPrice);
+            _output.DisplayMessage(message.content);
         }
 
         private double CollectMoney()

@@ -7,7 +7,7 @@ namespace CoffeeMachine
 {
     public class MessageBuilder
     {
-        public string BuildOrderMessage(Order order)
+        public OrderMessage BuildOrderMessage(Order order)
         {
             StringBuilder orderMessage = new StringBuilder();
 
@@ -23,14 +23,14 @@ namespace CoffeeMachine
                 orderMessage.Append(message);
             }
 
-            return orderMessage.ToString();
+            return new OrderMessage(orderMessage.ToString());
         }
         
         public string BuildIndividualMessage(IDrink drink)
         {
             string sugarMessage = "";
             string sugarAmount = drink.GetSugarAmount();
-            string drinkTemperature = drink.GetDrinkTemperature().ToString();
+            DrinkTemperature drinkTemperature = drink.GetDrinkTemperature();
             string drinkTypeMessage = $" {drink.GetDrinkType()}";
 
             if (sugarAmount != null)
@@ -40,9 +40,9 @@ namespace CoffeeMachine
                     : " with no sugar and no stick";
             }
 
-            string temperatureMessage = drinkTemperature == "normal" 
+            string temperatureMessage = drinkTemperature == DrinkTemperature.Normal
                 ? "" 
-                : " " + drinkTemperature.Replace('_', ' ');
+                : "extra hot";
 
             return $"Make 1{temperatureMessage}{drinkTypeMessage}{sugarMessage}\n";
         }
@@ -52,10 +52,12 @@ namespace CoffeeMachine
             return message.content.Substring(2) + "\n";
         }
 
-        public string BuildNotEnoughMoneyMessage(double moneyInserted, double price)
+        public OrderMessage BuildNotEnoughMoneyMessage(double moneyInserted, double price)
         {
             double missingAmount = Math.Round((price - moneyInserted), 1);
-            return $"Sorry, not enough money has been inserted. {missingAmount} more needed.";
+            string message = $"Sorry, not enough money has been inserted. {missingAmount} more needed.";
+
+            return new OrderMessage(message);
         }
     }
 }

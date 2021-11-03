@@ -38,7 +38,7 @@ namespace CoffeeMachine.Drinks
         
         public DrinkTemperature GetDrinkTemperature()
         {
-            return DrinkTemperature.normal;
+            return DrinkTemperature.Normal;
         }
         
         public List<IIngredient> GetIngredientList()
