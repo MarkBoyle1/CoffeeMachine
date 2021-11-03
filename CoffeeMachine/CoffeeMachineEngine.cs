@@ -96,20 +96,24 @@ namespace CoffeeMachine
         private Order CollectInput()
         {
             Order order = new Order();
+            string userResponse = " ";
 
-            while (StillCollectingInput(OutputMessages.AddMoreDrinks))
+            while (userResponse != "q")
             {
                 _output.DisplayMessage(OutputMessages.EnterInput);
-                string userResponse = _userInput.GetUserResponse();
+                userResponse = _userInput.GetUserResponse();
 
-                try
+                if (userResponse != "q")
                 {
-                    order = _inputProcessor.AddInputToOrder(userResponse, order);
-                }
-                catch (InvalidInputException)
-                {
-                    _output.DisplayMessage(OutputMessages.InvalidInput);
-                    _output.DisplayMessage(OutputMessages.DrinkNotAdded);
+                    try
+                    {
+                        order = _inputProcessor.AddInputToOrder(userResponse, order);
+                    }
+                    catch (InvalidInputException)
+                    {
+                        _output.DisplayMessage(OutputMessages.InvalidInput);
+                        _output.DisplayMessage(OutputMessages.DrinkNotAdded);
+                    }
                 }
             }
 
