@@ -23,12 +23,12 @@ namespace CoffeeMachine
                 return response;
             }
 
-            public bool GetUserDecision()
+            public string GetUserDecision()
             {
                 string decision = _listOfDecisions[0];
                 _listOfDecisions.RemoveAt(0);
             
-                return decision == "y";
+                return decision;
             }
     }
 }

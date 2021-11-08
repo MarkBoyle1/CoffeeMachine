@@ -7,106 +7,28 @@ namespace CoffeeMachine.Tests
 {
     public class CoffeeMachineTests
     {
-        private List<string> listOfResponses;
-        private List<string> listOfDecisions;
-        private ReportBuilder _reportBuilder;
+        private List<string> _listOfResponses;
+        private List<string> _listOfDecisionsForOneOrder;
+        private List<string> _listOfDecisionsForTwoOrders;
+
         private CoffeeMachineEngine _coffeeMachineEngine;
-        private MessageBuilder _messageBuilder;
-        private InputProcessor _inputProcessor;
 
         public CoffeeMachineTests()
         {
-            listOfResponses = new List<string>() {"T::"};
-            listOfDecisions = new List<string>() {"y", "y", "y", "n", "n"};
-            _coffeeMachineEngine = new CoffeeMachineEngine(new TestUserInput(listOfResponses, listOfDecisions));
-            _messageBuilder = new MessageBuilder();
-            _reportBuilder = new ReportBuilder();
-            _inputProcessor = new InputProcessor();
-        }
-        
-        [Fact]
-        public void given_inputEqualsT_when_CreateMessage_then_returns_Make_1_Tea_with_no_sugar_and_no_stick()
-        {
-            string[] input = new[] {"T::"};
-            Order order = CreateOrder(input);
-            
-            string expectedMessage = "Make 1 Tea with no sugar and no stick\n";
-            string actualMessage = _messageBuilder.BuildOrderMessage(order);
-            
-            Assert.Equal(expectedMessage, actualMessage);
-        }
-        
-        [Fact]
-        public void given_inputEqualsT1_when_CreateMessage_then_returns_Make_1_Tea_with_1_sugar_and_a_stick()
-        {
-            string[] input = new[] {"T:1:"};
-            Order order = CreateOrder(input);
-            
-            string expectedMessage = "Make 1 Tea with 1 sugar and a stick\n";
-            string actualMessage = _messageBuilder.BuildOrderMessage(order);
-            
-            Assert.Equal(expectedMessage, actualMessage);
-        }
-        
-        [Fact]
-        public void given_inputEqualsC1_when_CreateMessage_then_returns_Make_1_Coffee_with_1_sugar_and_a_stick()
-        {
-            string[] input = new[] {"C:1:"};
-            Order order = CreateOrder(input);
-            
-            string expectedMessage = "Make 1 Coffee with 1 sugar and a stick\n";
-            string actualMessage = _messageBuilder.BuildOrderMessage(order);
-            
-            Assert.Equal(expectedMessage, actualMessage);
+            _listOfResponses = new List<string>() {"T::", "q"};
+            _listOfDecisionsForOneOrder = new List<string>() {"y", "n"};
+            _listOfDecisionsForTwoOrders = new List<string>() {"y", "y", "n"};
+
+            _coffeeMachineEngine = new CoffeeMachineEngine(new TestUserInput(_listOfResponses, _listOfDecisionsForOneOrder));
         }
 
         [Fact]
-        public void given_inputEqualsC1andH_when_CreateMessage_then_returns_Make_1_Coffee_with_1_sugar_and_a_stick()
+        public void given_inputEqualsOneOrderWithT_when_RunProgram_then_returns_resultsWithOneT()
         {
-            string[] input = new[] {"C:1:", "H::"};
-            Order order = CreateOrder(input);
-            
-            string expectedMessage = "Make 1 Coffee with 1 sugar and a stick\n" +
-                                     "Make 1 Chocolate with no sugar and no stick\n";
-            string actualMessage = _messageBuilder.BuildOrderMessage(order);
-            
-            Assert.Equal(expectedMessage, actualMessage);
-        }
-        
-        [Fact]
-        public void given_inputEqualsO_when_CreateMessage_then_returns_Make_1_Orange_Juice()
-        {
-            string[] input = new[] {"O::"};
-            Order order = CreateOrder(input);
+            _listOfResponses = new List<string>() {"T::", "q", "0.4"};
+            _coffeeMachineEngine = new CoffeeMachineEngine(new TestUserInput(_listOfResponses, _listOfDecisionsForOneOrder));
 
-            string expectedMessage = "Make 1 Orange Juice\n";
-            string actualMessage = _messageBuilder.BuildOrderMessage(order);
-            
-            Assert.Equal(expectedMessage, actualMessage);
-        }
-        
-        [Fact]
-        public void given_inputEqualsCh_when_CreateMessage_then_returns_Make_1_Extra_Hot_Coffee_with_no_sugar_and_no_stick()
-        {
-            string[] input = new[] {"Ch::"};
-            Order order = CreateOrder(input);
-
-            string expectedMessage = "Make 1 extra hot Coffee with no sugar and no stick\n";
-            string actualMessage = _messageBuilder.BuildOrderMessage(order);
-            
-            Assert.Equal(expectedMessage, actualMessage);
-        }
-
-        [Fact]
-        public void given_inputEqualsOneOrderWithT_when_CreateReport_then_returns_resultsWithOneT()
-        {
-            listOfResponses = new List<string>() {"T::", "0.4"};
-            listOfDecisions = new List<string>() {"y", "y", "n", "n"};
-            _coffeeMachineEngine = new CoffeeMachineEngine(new TestUserInput(listOfResponses, listOfDecisions));
-
-            List<Order> allOrders = _coffeeMachineEngine.CollectAllOrders();
-
-            Report report = _reportBuilder.CreateReport(allOrders);
+            Report report = _coffeeMachineEngine.RunProgram();
 
             Dictionary<string, double> expectedResults = new Dictionary<string, double>()
             {
@@ -118,63 +40,89 @@ namespace CoffeeMachine.Tests
         }
         
         [Fact]
-        public void given_inputEqualsOneOrderWithTandCh_when_CreateReport_then_returns_resultsWithOneTeaAndOneCoffee()
+        public void given_inputEqualsOneOrderWithTandCh_when_RunProgram_then_returns_resultsWithOneTeaAndOneCoffee()
         {
-            listOfResponses = new List<string>() {"T::", "Ch:1:0", "1.0"};
-            listOfDecisions = new List<string>() {"y", "y", "y", "n", "n"};
-            _coffeeMachineEngine = new CoffeeMachineEngine(new TestUserInput(listOfResponses, listOfDecisions));
+            _listOfResponses = new List<string>() {"T::", "Hh:1:0", "q", "0.9"};
+            _coffeeMachineEngine = new CoffeeMachineEngine(new TestUserInput(_listOfResponses, _listOfDecisionsForOneOrder));
 
-            List<Order> allOrders = _coffeeMachineEngine.CollectAllOrders();
-
-            Report report = _reportBuilder.CreateReport(allOrders);
+            Report report = _coffeeMachineEngine.RunProgram();
 
             Dictionary<string, double> expectedResults = new Dictionary<string, double>()
             {
                 {"Tea", 1},
-                {"Coffee", 1},
-                {"Total Revenue", 1}
+                {"Chocolate", 1},
+                {"Total Revenue", 0.9}
             };
             
             Assert.Equal(expectedResults, report._results);
         }
-
-        public Order CreateOrder(string[] input)
+        
+        [Fact]
+        public void given_inputEqualsOneOrderWithThreeDifferentCoffees_when_RunProgram_then_returns_resultsWithOneThreeCoffees()
         {
-            List<Item> messages = new List<Item>();
-            List<char> _validDrinkCodes = new List<char>() {'C', 'T', 'H', 'O'};
+            _listOfResponses = new List<string>() {"H::", "Hh:1:0", "H:1:0", "q", "1.5"};
+            _coffeeMachineEngine = new CoffeeMachineEngine(new TestUserInput(_listOfResponses, _listOfDecisionsForOneOrder));
 
-            foreach (var element in input)
+            Report report = _coffeeMachineEngine.RunProgram();
+
+            Dictionary<string, double> expectedResults = new Dictionary<string, double>()
             {
-                if (_validDrinkCodes.Contains(element[0]))
-                {
-                    IDrink drink = _inputProcessor.ProcessInput(element);
-                    Item item = new Item(drink);
-                    messages.Add(item);
-                }
-                else if (element[0] == 'M')
-                {
-                    Item item = new Item(element);
-                    messages.Add(item);
-                }
-            }
-
-            double orderPrice = GetOrderPrice(messages);
+                {"Chocolate", 3},
+                {"Total Revenue", 1.5}
+            };
             
-            Order order = new Order(messages, orderPrice);
-
-            return order;
+            Assert.Equal(expectedResults, report._results);
         }
         
-        private double GetOrderPrice(List<Item> input)
+        [Fact]
+        public void given_inputEqualsOneOrderWithT_and_notEnoughMoney_then_addExtraMoney_when_RunProgram_then_returns_resultsWithOneT()
         {
-            double totalPrice = 0;
+            _listOfResponses = new List<string>() {"T::", "q", "0.3", "0.1"};
+            _coffeeMachineEngine = new CoffeeMachineEngine(new TestUserInput(_listOfResponses, _listOfDecisionsForOneOrder));
 
-            foreach (var message in input)
+            Report report = _coffeeMachineEngine.RunProgram();
+
+            Dictionary<string, double> expectedResults = new Dictionary<string, double>()
             {
-                totalPrice += message.Value;
-            }
+                {"Tea", 1},
+                {"Total Revenue", 0.4}
+            };
+            
+            Assert.Equal(expectedResults, report._results);
+        }
+        
+        [Fact]
+        public void given_inputEqualsOneOrderWithO_when_RunProgram_then_returns_resultsWithOneO()
+        {
+            _listOfResponses = new List<string>() {"O::", "q", "0.6"};
+            _coffeeMachineEngine = new CoffeeMachineEngine(new TestUserInput(_listOfResponses, _listOfDecisionsForOneOrder));
 
-            return totalPrice;
+            Report report = _coffeeMachineEngine.RunProgram();
+
+            Dictionary<string, double> expectedResults = new Dictionary<string, double>()
+            {
+                {"Orange Juice", 1},
+                {"Total Revenue", 0.6}
+            };
+            
+            Assert.Equal(expectedResults, report._results);
+        }
+        
+        [Fact]
+        public void given_inputEqualsTwoOrdersWithO_when_RunProgram_then_returns_resultsWithTwoO()
+        {
+            _listOfResponses = new List<string>() {"O::", "q", "0.6", "O::", "q", "0.6"};
+            _coffeeMachineEngine = new CoffeeMachineEngine(new TestUserInput(_listOfResponses, _listOfDecisionsForTwoOrders));
+
+            Report report = _coffeeMachineEngine.RunProgram();
+
+            Dictionary<string, double> expectedResults = new Dictionary<string, double>()
+            {
+                {"Orange Juice", 2},
+                {"Total Revenue", 1.2}
+            };
+            
+            Assert.Equal(expectedResults, report._results);
         }
     }
 }
