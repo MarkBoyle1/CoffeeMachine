@@ -6,7 +6,6 @@ namespace CoffeeMachine.Output
         public const string InsertMoney = "Please enter the amount of money inserted:";
         public const string DrinkNotAdded = "Invalid Input. Drink not added to order";
         public const string AddMoreOrders = "Would you like to create a new order? y/n";
-        public const string AddMoreDrinks = "Would you like to add an item to this order? y/n";
         public const string Report = "Report:";
         public const string Welcome = "Welcome to the Coffee Machine!";
         public const string InvalidInput = "Invalid input.";

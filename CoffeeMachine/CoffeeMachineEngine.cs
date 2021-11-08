@@ -17,12 +17,13 @@ namespace CoffeeMachine
         private ReportBuilder _reportBuilder;
         private IEmailNotifier _emailNotifier;
         private IngredientQuantityChecker _ingredientQuantityChecker;
-
+        private const string Quit = "q";
+        
         public CoffeeMachineEngine(IUserInput userInput)
         {
             _userInput = userInput;
             _output = new CustomerOutput();
-            _inputProcessor = new InputProcessor();
+            _inputProcessor = new InputProcessor(userInput);
             _messageBuilder = new MessageBuilder();
             _reportBuilder = new ReportBuilder();
             _emailNotifier = new EmailNotifier();
@@ -32,53 +33,42 @@ namespace CoffeeMachine
         public Report RunProgram()
         {
             _output.DisplayMessage(OutputMessages.Welcome);
-            List<Order> allOrders = CollectAllOrders();
+            List<Order> allOrders = new List<Order>();
+            List<Order> unfulfilledOrders = new List<Order>();
+
+            while (_inputProcessor.StillCollectingInput(OutputMessages.AddMoreOrders))
+            {
+                Order order = CollectInput();
+
+                List<IIngredient> emptyIngredients = _ingredientQuantityChecker.CheckForEmptyIngredients(order);
+
+                if (emptyIngredients.Count > 0)
+                {
+                    _emailNotifier.notifyMissingIngredients(emptyIngredients);
+                    unfulfilledOrders.Add(order);
+                    continue;
+                }
+            
+                double orderPrice = GetOrderPrice(order);
+                double moneyInserted = CollectMoney();
+            
+                while (moneyInserted < orderPrice)
+                {
+                    RejectOrder(orderPrice, moneyInserted);
+                    double additionalMoney = CollectMoney();
+                    moneyInserted += additionalMoney;
+                }
+            
+                SendOrderToDrinkMaker(order);
+                
+                allOrders.Add(order);
+            }
+            
             
             Report report = _reportBuilder.CreateReport(allOrders);
             DisplayReport(report);
             
             return report;
-        }
-        
-        private List<Order> CollectAllOrders()
-        {
-            List<Order> allOrders = new List<Order>();
-            
-            while (StillCollectingInput(OutputMessages.AddMoreOrders))
-            {
-                Order order = CollectOneOrder();
-                
-                allOrders.Add(order);
-            }
-
-            return allOrders;
-        }
-
-        private Order CollectOneOrder()
-        {
-            Order order = CollectInput();
-
-            List<IIngredient> emptyIngredients = _ingredientQuantityChecker.CheckForEmptyIngredients(order);
-
-            if (emptyIngredients.Count > 0)
-            {
-                _emailNotifier.notifyMissingIngredients(emptyIngredients);
-                return new Order(order);
-            }
-            
-            double orderPrice = GetOrderPrice(order);
-            double moneyInserted = CollectMoney();
-            
-            while (moneyInserted < orderPrice)
-            {
-                RejectOrder(orderPrice, moneyInserted);
-                double additionalMoney = CollectMoney();
-                moneyInserted += additionalMoney;
-            }
-            
-            SendOrderToDrinkMaker(order);
-            
-            return order;
         }
         
         private double GetOrderPrice(Order order)
@@ -96,14 +86,14 @@ namespace CoffeeMachine
         private Order CollectInput()
         {
             Order order = new Order();
-            string userResponse = " ";
+            string userResponse = "";
 
-            while (userResponse != "q")
+            while (userResponse != Quit)
             {
                 _output.DisplayMessage(OutputMessages.EnterInput);
                 userResponse = _userInput.GetUserResponse();
 
-                if (userResponse != "q")
+                if (userResponse != Quit)
                 {
                     try
                     {
@@ -118,21 +108,6 @@ namespace CoffeeMachine
             }
 
             return order;
-        }
-        
-        private bool StillCollectingInput(string message)
-        {
-            _output = new CustomerOutput();
-            _output.DisplayMessage(message);
-            string response = _userInput.GetUserDecision();
-
-            while (response != "y" && response != "n")
-            {
-                _output.DisplayMessage(OutputMessages.InvalidInput);
-                _output.DisplayMessage(OutputMessages.PleaseTryAgain);
-                response = _userInput.GetUserDecision();
-            }
-            return response == "y";
         }
 
         private void SendOrderToDrinkMaker(Order order)

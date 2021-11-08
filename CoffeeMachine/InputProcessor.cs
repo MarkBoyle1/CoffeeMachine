@@ -18,14 +18,37 @@ namespace CoffeeMachine
         private const string OrangeJuice = "O";
         private const string ExtraHot = "h";
         private const string Message = "M";
+        private const string Yes = "y";
+        private const string No = "n";
         private IOutput _output = new CustomerOutput();
+        private IUserInput _userInput;
+        private List<string> _validDrinkCodes = new List<string>() {Coffee, Tea, Chocolate, OrangeJuice};
 
+        public InputProcessor(IUserInput userInput)
+        {
+            _userInput = userInput;
+        }
+
+        public bool StillCollectingInput(string message)
+        {
+            _output = new CustomerOutput();
+            _output.DisplayMessage(message);
+            string response = _userInput.GetUserDecision();
+
+            while (response != Yes && response != No)
+            {
+                _output.DisplayMessage(OutputMessages.InvalidInput);
+                _output.DisplayMessage(OutputMessages.PleaseTryAgain);
+                response = _userInput.GetUserDecision();
+            }
+            return response == Yes;
+        }
         public Order AddInputToOrder(string input, Order order)
         {
-            List<string> _validDrinkCodes = new List<string>() {Coffee, Tea, Chocolate, OrangeJuice};
+            string inputCode = input[0].ToString().ToUpper();
             
-            bool isDrink = _validDrinkCodes.Contains(input[0].ToString().ToUpper());
-            bool isMessage = input[0].ToString().ToUpper() == Message;
+            bool isDrink = _validDrinkCodes.Contains(inputCode);
+            bool isMessage = inputCode == Message;
 
             if (isDrink)
             {

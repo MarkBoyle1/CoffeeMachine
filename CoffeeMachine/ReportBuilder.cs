@@ -13,9 +13,7 @@ namespace CoffeeMachine
 
             foreach (Order order in orders)
             {
-                if (order.PossibleToMake)
-                {
-                    foreach (IDrink drink in order.DrinkList)
+                foreach (IDrink drink in order.DrinkList)
                     {
                         string drinkType = drink.GetDrinkType();
                         sales[drinkType] = sales.ContainsKey(drinkType) ? sales[drinkType] + 1 : 1;
@@ -23,8 +21,6 @@ namespace CoffeeMachine
 
                         totalRevenue += drink.GetPrice();
                     }
-                }
-                
             }
 
             sales["Total Revenue"] = Math.Round(totalRevenue, 1);

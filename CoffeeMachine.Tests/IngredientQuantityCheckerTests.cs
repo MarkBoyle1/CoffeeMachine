@@ -7,7 +7,6 @@ namespace CoffeeMachine.Tests
 {
     public class IngredientQuantityCheckerTests
     {
-        private InputProcessor _inputProcessor = new InputProcessor();
         private IngredientQuantityChecker _ingredientQuantityChecker = new IngredientQuantityChecker();
         private List<IDrink> _sampleDrinks;
 

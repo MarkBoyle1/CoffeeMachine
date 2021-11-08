@@ -1,10 +1,21 @@
+using System.Collections.Generic;
 using Xunit;
 
 namespace CoffeeMachine.Tests
 {
     public class InputProcessorTests
     {
-        InputProcessor _inputProcessor = new InputProcessor();
+        private List<string> _listOfResponses;
+        private List<string> _listOfDecisions;
+
+        private InputProcessor _inputProcessor;
+
+        public InputProcessorTests()
+        {
+            _listOfResponses = new List<string>();
+            _listOfDecisions = new List<string>();
+            _inputProcessor = new InputProcessor(new TestUserInput(_listOfResponses, _listOfDecisions));
+        }
         
         [Fact]
         public void given_inputEqualsT_when_CreateItem_then_GetDrinkType_returns_Tea()
